@@ -2,6 +2,37 @@
 
 Automated standard project folder structure generation python scripts.
 
+```plantuml
+@startsalt
+{
+  {T
+   + <>project-folder
+   ++ **source**
+   ++ **docs**
+   ++ **config**
+   +++ sub modules cfg files
+   ++++ sub-module1-cfg.h
+   ++++ sub-module2-cfg.h
+   ++ **example**
+   +++ Implementation 1
+   +++ Implementation 2
+   ++ **test**
+   +++ unit-test
+   ++ **library**
+   +++ sub modules
+   +++ 3rd party library
+   ++ **project**
+   ++ **tools**
+   ++ <color:green>scripts</color>
+   +++ project-folder.py
+   +++ smake.py
+   + LICENSE
+   + README.md
+  }
+}
+@endsalt
+```
+
 ## project-folder
 
 [project-folder.py](/scripts/project-folder.py) : Generate standard folder structure in initial project workplace.
@@ -31,7 +62,8 @@ Automated standard project folder structure generation python scripts.
 
 [-f FILE_NAME] -- required.
 [-d DIRECTORY] -- optional. Source file create location
-[-s SMART]     -- optional. Source file create in source and config folder as per project-folder.py folder structure
+[-s SMART]     -- optional. Source file create in source and config folder 
+                  as per project-folder.py folder structure
 ```
 
 ### Example 
