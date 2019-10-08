@@ -2,35 +2,22 @@
 
 Automated standard project folder structure generation python scripts.
 
-```plantuml
-@startsalt
-{
-  {T
-   + <>project-folder
-   ++ **source**
-   ++ **docs**
-   ++ **config**
-   +++ sub modules cfg files
-   ++++ sub-module1-cfg.h
-   ++++ sub-module2-cfg.h
-   ++ **example**
-   +++ Implementation 1
-   +++ Implementation 2
-   ++ **test**
-   +++ unit-test
-   ++ **library**
-   +++ sub modules
-   +++ 3rd party library
-   ++ **project**
-   ++ **tools**
-   ++ <color:green>scripts</color>
-   +++ project-folder.py
-   +++ smake.py
-   + LICENSE
-   + README.md
-  }
-}
-@endsalt
+```
+      project-folder
+      +-- source
+      +-- docs
+      +-- config
+      +-- example
+      +-- test
+          +-- unit-test
+      +-- library
+      +-- project
+      +-- tools
+      +-- scripts                      # initial Copy/paste to project-folder
+          +-- project-folder.py        # run to generate std folders
+          +-- smake.py                 # run to generate .c/.h files
+      +-- LICENSE                      # initial Copy/paste to project-folder 
+      +-- README.md                    # initial Copy/paste to project-folder
 ```
 
 ## project-folder
