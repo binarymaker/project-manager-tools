@@ -51,6 +51,14 @@ header_incl_tmpl = \
 #ifndef BM_%(uuid)s
 #define BM_%(uuid)s
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* BM_%(uuid)s */
 """
