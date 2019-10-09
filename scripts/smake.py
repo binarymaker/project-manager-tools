@@ -48,25 +48,59 @@ copyright_tmpl = \
 
 header_incl_tmpl = \
 """
-#ifndef BM_%(uuid)s
-#define BM_%(uuid)s
+#ifndef %(filename)s_%(uuid)s
+#define %(filename)s_%(uuid)s
 
 #ifdef __cplusplus
  extern "C" {
 #endif
+
+#define __%(filename)s_VERSION_MAIN (0x00)
+#define __%(filename)s_VERSION_BETA (0x01)
+#define __%(filename)s_VERSION      ((__%(filename)s_VERSION_MAIN << 8U ) \\
+                                        |(__%(filename)s_VERSION_BETA))
+
+
+
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* BM_%(uuid)s */
+#endif /* %(filename)s_%(uuid)s */
 """
 
-def h_create (file_handle):
+config_incl_tmpl = \
+"""
+#ifndef %(filename)s_%(uuid)s
+#define %(filename)s_%(uuid)s
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* %(filename)s_%(uuid)s */
+"""
+
+def h_create (file_handle, fname):
     file_handle.write (copyright_tmpl)
     file_handle.write (header_incl_tmpl %
-                       ({'uuid': str(uuid.uuid1()).replace('-','_'),}))
+                       ({'uuid': str(uuid.uuid1()).replace('-','_'),
+                         'filename': str(fname).upper().replace('-','_')}),)
+    file_handle.close ()
+
+def cfg_create (file_handle, fname):
+    file_handle.write (copyright_tmpl)
+    file_handle.write (config_incl_tmpl %
+                       ({'uuid': str(uuid.uuid1()).replace('-','_'),
+                         'filename': str(fname).upper().replace('-','_')}),)
     file_handle.close ()
 
 def src_create (file_handle):
@@ -115,7 +149,7 @@ def main():
         print("file exists", src_path)
     else:
         h_file = open(src_path,'w')
-        h_create(h_file)
+        h_create(h_file, args['file_name'])
         print("file create", src_path)
 
     src_path = (path_cfg + '-cfg.h')
@@ -124,7 +158,7 @@ def main():
         print("file exists", src_path)
     else:
         cfg_file = open(src_path,'w')
-        h_create(cfg_file)
+        cfg_create(cfg_file, args['file_name'])
         print("file create", src_path)
     
 
