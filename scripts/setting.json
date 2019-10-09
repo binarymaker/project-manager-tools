@@ -1,0 +1,19 @@
+{
+  
+  "git_config":{
+      "name" : "binarymaker",
+      "email": "importfunfromcode@gmail.com"
+  },
+
+  "project_folders":[
+                    "source"  ,
+                    "docs"    ,
+                    "config"  ,
+                    "example" ,
+                    "test"    , "test/unit-test",
+                    "library" ,
+                    "project" ,
+                    "tools"
+  ]
+
+}

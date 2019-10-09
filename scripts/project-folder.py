@@ -20,17 +20,10 @@
 
 import os
 import argparse
+import subprocess
+import time
+import json
 
-folders = [ 
-            'source' ,
-            'docs'   ,
-            'config' ,
-            'example',
-            'test'   , 'test/unit-test',
-            'library',
-            'project',
-            'tools'
-          ]
 
 def main():
 
@@ -39,10 +32,16 @@ def main():
     parser.add_argument ("-d", "--directory",
                         help="software project folder orgnatation tool",
                         type=str, required=True)
+    parser.add_argument ("-g", "--git", action='store_true',
+                        help="git auto initialization"
+                        )
 
     args = vars(parser.parse_args())
 
-    for folder in folders:
+    with open('setting.json') as f:
+        settings = json.load(f)
+
+    for folder in settings["project_folders"]:
         path = args['directory'] + '/' +folder
         try:
             os.makedirs(path)
@@ -50,5 +49,18 @@ def main():
         except FileExistsError:
             print ('folder exist  -', path)
 
+    os.chdir(args['directory'])
+    print(" ************* Git creation *************")
+    ret = subprocess.call("git init", shell=True)
+    git_config = settings["git_config"]
+    subprocess.call("git config user.name "+ git_config["name"], shell=True)
+    subprocess.call("git config user.email "+ git_config["email"], shell=True)
+    ret = subprocess.call("git checkout -b develop", shell=True)
+    if ret == 0:
+        subprocess.call("git add .", shell=True)
+        subprocess.call("git commit -m \"initial commit\" ", shell=True)
+        
+    os.chdir(args['directory'])
+    
 if __name__ == "__main__":
     main ()
