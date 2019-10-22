@@ -14,6 +14,12 @@
                     "library" ,
                     "project" ,
                     "tools"
-  ]
+  ],
 
+  "project_files":[
+    {
+      "name": "README.md",
+      "text": ""
+    }
+  ]
 }

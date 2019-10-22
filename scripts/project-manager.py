@@ -24,11 +24,20 @@ import subprocess
 import time
 import json
 
+def file_create(file_name, file_text):
+    if(os.path.exists(file_name)):
+        print("file exists", file_name)
+    else:
+        proj_file = open(file_name,'w')
+        proj_file.write(file_text)
+        proj_file.close()
+        print("file created", file_name)
+
 
 def main():
 
     parser = argparse.ArgumentParser (
-        prog="project-folder", description="simple project folder structure creation tool")
+        prog="project-manager", description="project folder structure creation tool")
     parser.add_argument ("-d", "--directory",
                         help="software project folder orgnatation tool",
                         type=str, required=True)
@@ -49,17 +58,22 @@ def main():
         except FileExistsError:
             print ('folder exist  -', path)
 
-    os.chdir(args['directory'])
-    print(" ************* Git creation *************")
-    ret = subprocess.call("git init", shell=True)
-    git_config = settings["git_config"]
-    subprocess.call("git config user.name "+ git_config["name"], shell=True)
-    subprocess.call("git config user.email "+ git_config["email"], shell=True)
-    ret = subprocess.call("git checkout -b develop", shell=True)
-    if ret == 0:
-        subprocess.call("git add .", shell=True)
-        subprocess.call("git commit -m \"initial commit\" ", shell=True)
-        
+    for files in settings["project_files"]:
+        path = args['directory'] + '/' + files["name"]
+        file_create(path, files["text"])
+
+    if (args['git']):
+        os.chdir(args['directory'])
+        print(" ************* Git creation *************")
+        ret = subprocess.call("git init", shell=True)
+        git_config = settings["git_config"]
+        subprocess.call("git config user.name "+ git_config["name"], shell=True)
+        subprocess.call("git config user.email "+ git_config["email"], shell=True)
+        ret = subprocess.call("git checkout -b develop", shell=True)
+        if ret == 0:
+            subprocess.call("git add .", shell=True)
+            subprocess.call("git commit -m \"initial commit\" ", shell=True)
+
     os.chdir(args['directory'])
     
 if __name__ == "__main__":

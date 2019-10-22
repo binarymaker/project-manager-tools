@@ -25,7 +25,7 @@ from datetime import date
 
 year = str(date.today().year)
 copyright_tmpl = \
-"""/**
+"""/**\cond
   ******************************************************************************
   * ______  _                             ___  ___        _               
   * | ___ \(_)                            |  \/  |       | |              
@@ -43,7 +43,7 @@ copyright_tmpl = \
   * this distribution.
   * Written by Binary Maker <https://github.com/binarymaker>
   ******************************************************************************
-  */
+  \endcond*/
 """
 
 header_incl_tmpl = \
@@ -55,13 +55,18 @@ header_incl_tmpl = \
  extern "C" {
 #endif
 
-#define __%(filename)s_VERSION_MAIN (0x00)
-#define __%(filename)s_VERSION_BETA (0x01)
-#define __%(filename)s_VERSION      ((__%(filename)s_VERSION_MAIN << 8U ) \\
-                                        |(__%(filename)s_VERSION_BETA))
+/**
+ * \brief Source file version tag
+ *        
+ *        version info: [15:8] main [7:0] beta
+ */
+#define __%(filename)s_VERSION      (0x0001u)
 
-
-
+/* Includes ------------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
 
 
 #ifdef __cplusplus
@@ -69,6 +74,19 @@ header_incl_tmpl = \
 #endif
 
 #endif /* %(filename)s_%(uuid)s */
+
+"""
+
+source_tmpl = \
+"""
+/* Includes ------------------------------------------------------------------*/
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
+
 """
 
 config_incl_tmpl = \
@@ -80,6 +98,11 @@ config_incl_tmpl = \
  extern "C" {
 #endif
 
+/* Includes ------------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
 
 
 #ifdef __cplusplus
@@ -87,6 +110,7 @@ config_incl_tmpl = \
 #endif
 
 #endif /* %(filename)s_%(uuid)s */
+
 """
 
 def h_create (file_handle, fname):
@@ -105,6 +129,7 @@ def cfg_create (file_handle, fname):
 
 def src_create (file_handle):
     file_handle.write (copyright_tmpl)
+    file_handle.write (source_tmpl)
     file_handle.close ()
 
 def main():
@@ -128,7 +153,7 @@ def main():
         path_src = args['directory'] + '/' + args['file_name']
         path_cfg = path_src
     elif args['smart'] is not None:
-        path_scr = args['smart'] + '/' + 'source' + '/' + args['file_name']
+        path_src = args['smart'] + '/' + 'source' + '/' + args['file_name']
         path_cfg = args['smart'] + '/' + 'config' + '/' + args['file_name']
     else:
         path_src = args['file_name']
@@ -159,6 +184,15 @@ def main():
     else:
         cfg_file = open(src_path,'w')
         cfg_create(cfg_file, args['file_name'])
+        print("file create", src_path)
+
+    src_path = (path_cfg + '-cfg.c')
+
+    if(path.exists(src_path)):
+        print("file exists", src_path)
+    else:
+        cfg_src_file = open(src_path,'w')
+        src_create(cfg_src_file)
         print("file create", src_path)
     
 
