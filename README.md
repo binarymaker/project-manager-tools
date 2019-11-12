@@ -3,8 +3,8 @@
 Automated standard project folder structure generation python scripts.
 
 ```
-      project-folder
- ------------------------------------ # Auto generated folders
+    project-folder
+ ---|-------------------------------- # Auto generated folders
  |  +-- source                      |
  |  +-- docs                        |
  |  +-- config                      |
@@ -15,16 +15,15 @@ Automated standard project folder structure generation python scripts.
  |  +-- project                     |
  |  +-- tools                       |
  ---|--------------------------------
-    +-- scripts                      #(1) initial Copy/paste to project-folder
-        +-- project-manager.py       #(2) run to generate std folders
+    +-- scripts                      #(1) Copy script folder from repo to project-folder
+        +-- project-manager.py       #(2) run to generate std folders and files
         +-- smake.py                 #(3) run to generate .c/.h files
-    +-- LICENSE                      #(1) initial Copy/paste to project-folder 
-    +-- README.md
+    +-- README.md                    # Auto generated file
 ```
 
 ## project-manager
 
-[project-manager.py](project-manager.py) : Generate standard folder structure for initial project workplace.
+[project-manager.py](scripts/project-manager.py) : Generate standard folder structure for initial project workplace.
 
 ### Usage 
 ```shell
@@ -33,10 +32,9 @@ Automated standard project folder structure generation python scripts.
 Required arguments:
     [-d DIRECTORY] -- project folder directory
 Optional arguments:
-    [-g --git]   -- git auto initialization.
-    [-h]         -- Help
+    [-g --git]     -- git auto initialization.
+    [-h]           -- Help
 ```
-
 
 ### Example 
 ```shell
@@ -46,8 +44,7 @@ Optional arguments:
 
 ## smake
 
-[smake.py](smake.py) : Generate C/C++ source and header files.
-
+[smake.py](scripts/smake.py) : Generate C/C++ source and header files.
 
 ### Usage 
 ```shell
@@ -60,6 +57,17 @@ Optional arguments:
     [-s SMART]     -- Source file create in source and config folder 
                         as per project-manager.py folder structure
 ```
+### Example 
+```shell
+# Create source template file in current folder
+> python3 smake.py -f app
+
+# Create source template file in previews path
+> python3 smake.py -f app -d ..
+
+# Create source template file in previews path source and config folders
+> python3 smake.py -f app -d .. -s
+```
 
 ## Customization
 
@@ -67,7 +75,7 @@ Optional arguments:
 ```
 > git clone https://github.com/<your_username>/project-manager-tools.git (your repo)
 ```
-* Modify [setting.json](setting.json)
+* Modify [setting.json](scripts/setting.json)
 
 ```json
 {
