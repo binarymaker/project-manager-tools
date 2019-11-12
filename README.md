@@ -4,63 +4,95 @@ Automated standard project folder structure generation python scripts.
 
 ```
       project-folder
-      +-- source
-      +-- docs
-      +-- config
-      +-- example
-      +-- test
-          +-- unit-test
-      +-- library
-      +-- project
-      +-- tools
-      +-- scripts                      # initial Copy/paste to project-folder
-          +-- project-folder.py        # run to generate std folders
-          +-- smake.py                 # run to generate .c/.h files
-      +-- LICENSE                      # initial Copy/paste to project-folder 
-      +-- README.md                    # initial Copy/paste to project-folder
+ ------------------------------------ # Auto generated folders
+ |  +-- source                      |
+ |  +-- docs                        |
+ |  +-- config                      |
+ |  +-- example                     |
+ |  +-- test                        |
+ |      +-- unit-test               |
+ |  +-- library                     |
+ |  +-- project                     |
+ |  +-- tools                       |
+ ---|--------------------------------
+    +-- scripts                      #(1) initial Copy/paste to project-folder
+        +-- project-manager.py       #(2) run to generate std folders
+        +-- smake.py                 #(3) run to generate .c/.h files
+    +-- LICENSE                      #(1) initial Copy/paste to project-folder 
+    +-- README.md
 ```
 
-## project-folder
+## project-manager
 
-[project-folder.py](/scripts/project-folder.py) : Generate standard folder structure in initial project workplace.
+[project-manager.py](project-manager.py) : Generate standard folder structure for initial project workplace.
 
 ### Usage 
 ```shell
-> python3 project-folder [-d DIRECTORY]
+> python3 project-manager [-d DIRECTORY] [-g --git]
 
-[-d DIRECTORY] -- required. Project folder structure create location
+Required arguments:
+    [-d DIRECTORY] -- project folder directory
+Optional arguments:
+    [-g --git]   -- git auto initialization.
+    [-h]         -- Help
 ```
 
 
 ### Example 
 ```shell
 # Create folders in previews path
-> python3 project-folder.py -d .. 
+> python3 project-manager.py -d .. 
 ```
 
 ## smake
 
-[smake.py](/scripts/smake.py) : Generate C/C++ source and header files.
+[smake.py](smake.py) : Generate C/C++ source and header files.
 
 
 ### Usage 
 ```shell
 > python3 smake [-f FILE_NAME] [-d DIRECTORY] [-s SMART]
 
-[-f FILE_NAME] -- required.
-[-d DIRECTORY] -- optional. Source file create location
-[-s SMART]     -- optional. Source file create in source and config folder 
-                  as per project-folder.py folder structure
+Required arguments:
+    [-f FILE_NAME] --  library file name
+Optional arguments:
+    [-d DIRECTORY] -- Source file create location
+    [-s SMART]     -- Source file create in source and config folder 
+                        as per project-manager.py folder structure
 ```
 
-### Example 
-```shell
-# Create source template file in current folder
-> python3 project-folder.py -f app
+## Customization
 
-# Create source template file in previews path
-> python3 project-folder.py -f app -d ..
+* Fork https://github.com/binarymaker/project-manager-tools (this repo) to your account
+```
+> git clone https://github.com/<your_username>/project-manager-tools.git (your repo)
+```
+* Modify [setting.json](setting.json)
 
-# Create source template file in previews path source and config folders
-> python3 project-folder.py -f app -d .. -s Y
+```json
+{
+  
+  "git_config":{
+      "name" : "binarymaker",
+      "email": "importfunfromcode@gmail.com"
+  },
+
+  "project_folders":[
+                    "source"  ,
+                    "docs"    ,
+                    "config"  ,
+                    "example" ,
+                    "test"    , "test/unit-test",
+                    "library" ,
+                    "project" ,
+                    "tools"
+  ],
+
+  "project_files":[
+    {
+      "name": "README.md",
+      "text": ""
+    }
+  ]
+}
 ```
