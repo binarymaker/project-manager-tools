@@ -25,7 +25,7 @@ from datetime import date
 
 year = str(date.today().year)
 copyright_tmpl = \
-"""/**
+"""/**\cond
   ******************************************************************************
   * ______  _                             ___  ___        _               
   * | ___ \(_)                            |  \/  |       | |              
@@ -43,26 +43,93 @@ copyright_tmpl = \
   * this distribution.
   * Written by Binary Maker <https://github.com/binarymaker>
   ******************************************************************************
-  */
+  \endcond*/
 """
 
 header_incl_tmpl = \
 """
-#ifndef BM_%(uuid)s
-#define BM_%(uuid)s
+#ifndef %(filename)s_%(uuid)s
+#define %(filename)s_%(uuid)s
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+/**
+ * \brief Source file version tag
+ *        
+ *        version info: [15:8] main [7:0] beta
+ */
+#define __%(filename)s_VERSION      (0x0001u)
+
+/* Includes ------------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
 
 
-#endif /* BM_%(uuid)s */
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* %(filename)s_%(uuid)s */
+
 """
 
-def h_create (file_handle):
+source_tmpl = \
+"""
+/* Includes ------------------------------------------------------------------*/
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
+
+"""
+
+config_incl_tmpl = \
+"""
+#ifndef %(filename)s_%(uuid)s
+#define %(filename)s_%(uuid)s
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+/* Includes ------------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* %(filename)s_%(uuid)s */
+
+"""
+
+def h_create (file_handle, fname):
     file_handle.write (copyright_tmpl)
     file_handle.write (header_incl_tmpl %
-                       ({'uuid': str(uuid.uuid1()).replace('-','_'),}))
+                       ({'uuid': str(uuid.uuid1()).replace('-','_'),
+                         'filename': str(fname).upper().replace('-','_')}),)
+    file_handle.close ()
+
+def cfg_create (file_handle, fname):
+    file_handle.write (copyright_tmpl)
+    file_handle.write (config_incl_tmpl %
+                       ({'uuid': str(uuid.uuid1()).replace('-','_'),
+                         'filename': str(fname).upper().replace('-','_')}),)
     file_handle.close ()
 
 def src_create (file_handle):
     file_handle.write (copyright_tmpl)
+    file_handle.write (source_tmpl)
     file_handle.close ()
 
 def main():
@@ -86,7 +153,7 @@ def main():
         path_src = args['directory'] + '/' + args['file_name']
         path_cfg = path_src
     elif args['smart'] is not None:
-        path_scr = args['smart'] + '/' + 'source' + '/' + args['file_name']
+        path_src = args['smart'] + '/' + 'source' + '/' + args['file_name']
         path_cfg = args['smart'] + '/' + 'config' + '/' + args['file_name']
     else:
         path_src = args['file_name']
@@ -107,7 +174,7 @@ def main():
         print("file exists", src_path)
     else:
         h_file = open(src_path,'w')
-        h_create(h_file)
+        h_create(h_file, args['file_name'])
         print("file create", src_path)
 
     src_path = (path_cfg + '-cfg.h')
@@ -116,7 +183,16 @@ def main():
         print("file exists", src_path)
     else:
         cfg_file = open(src_path,'w')
-        h_create(cfg_file)
+        cfg_create(cfg_file, args['file_name'])
+        print("file create", src_path)
+
+    src_path = (path_cfg + '-cfg.c')
+
+    if(path.exists(src_path)):
+        print("file exists", src_path)
+    else:
+        cfg_src_file = open(src_path,'w')
+        src_create(cfg_src_file)
         print("file create", src_path)
     
 

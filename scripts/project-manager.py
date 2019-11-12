@@ -20,29 +20,37 @@
 
 import os
 import argparse
+import subprocess
+import time
+import json
 
-folders = [ 
-            'source' ,
-            'docs'   ,
-            'config' ,
-            'example',
-            'test'   , 'test/unit-test',
-            'library',
-            'project',
-            'tools'
-          ]
+def file_create(file_name, file_text):
+    if(os.path.exists(file_name)):
+        print("file exists", file_name)
+    else:
+        proj_file = open(file_name,'w')
+        proj_file.write(file_text)
+        proj_file.close()
+        print("file created", file_name)
+
 
 def main():
 
     parser = argparse.ArgumentParser (
-        prog="project-folder", description="simple project folder structure creation tool")
+        prog="project-manager", description="project folder structure creation tool")
     parser.add_argument ("-d", "--directory",
-                        help="software project folder orgnatation tool",
+                        help="project folder directory",
                         type=str, required=True)
+    parser.add_argument ("-g", "--git", action='store_true',
+                        help="git auto initialization"
+                        )
 
     args = vars(parser.parse_args())
 
-    for folder in folders:
+    with open('setting.json') as f:
+        settings = json.load(f)
+
+    for folder in settings["project_folders"]:
         path = args['directory'] + '/' +folder
         try:
             os.makedirs(path)
@@ -50,5 +58,24 @@ def main():
         except FileExistsError:
             print ('folder exist  -', path)
 
+    for files in settings["project_files"]:
+        path = args['directory'] + '/' + files["name"]
+        file_create(path, files["text"])
+
+    if (args['git']):
+        os.chdir(args['directory'])
+        print(" ************* Git creation *************")
+        ret = subprocess.call("git init", shell=True)
+        git_config = settings["git_config"]
+        subprocess.call("git config user.name "+ git_config["name"], shell=True)
+        print ("git user name  :", git_config["name"])
+        subprocess.call("git config user.email "+ git_config["email"], shell=True)
+        print ("git user email :", git_config["email"])
+        ret = subprocess.call("git checkout -b develop", shell=True)
+        if ret == 0:
+            print ("git 'develop' branch created")
+
+    os.chdir(args['directory'])
+    
 if __name__ == "__main__":
     main ()
