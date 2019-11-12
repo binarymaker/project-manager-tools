@@ -56,7 +56,7 @@ header_incl_tmpl = \
 #endif
 
 /**
- * \brief Source file version tag
+ * \\brief Source file version tag
  *        
  *        version info: [15:8] main [7:0] beta
  */

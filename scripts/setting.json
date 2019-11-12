@@ -7,7 +7,7 @@
 
   "project_folders":[
                     "source"  ,
-                    "docs"    ,
+                    "docs"    , "docs/diagrams/source", "docs/diagrams/out",
                     "config"  ,
                     "example" ,
                     "test"    , "test/unit-test",
