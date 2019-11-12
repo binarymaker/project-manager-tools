@@ -39,7 +39,7 @@ def main():
     parser = argparse.ArgumentParser (
         prog="project-manager", description="project folder structure creation tool")
     parser.add_argument ("-d", "--directory",
-                        help="software project folder orgnatation tool",
+                        help="project folder directory",
                         type=str, required=True)
     parser.add_argument ("-g", "--git", action='store_true',
                         help="git auto initialization"
@@ -68,11 +68,12 @@ def main():
         ret = subprocess.call("git init", shell=True)
         git_config = settings["git_config"]
         subprocess.call("git config user.name "+ git_config["name"], shell=True)
+        print ("git user name  :", git_config["name"])
         subprocess.call("git config user.email "+ git_config["email"], shell=True)
+        print ("git user email :", git_config["email"])
         ret = subprocess.call("git checkout -b develop", shell=True)
         if ret == 0:
-            subprocess.call("git add .", shell=True)
-            subprocess.call("git commit -m \"initial commit\" ", shell=True)
+            print ("git 'develop' branch created")
 
     os.chdir(args['directory'])
     
