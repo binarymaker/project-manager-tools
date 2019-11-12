@@ -23,7 +23,7 @@ Automated standard project folder structure generation python scripts.
 
 ## project-manager
 
-[project-manager.py](scripts/project-manager.py) : Generate standard folder structure for initial project workplace.
+[project-manager.py](scripts/project-manager.py) : Generate standard folder structure for initiate project workplace.
 
 ### Usage 
 ```shell
@@ -72,6 +72,7 @@ Optional arguments:
 ## Customization
 
 * Fork https://github.com/binarymaker/project-manager-tools (this repo) to your account
+* clone repo from your account
 ```
 > git clone https://github.com/<your_username>/project-manager-tools.git (your repo)
 ```
@@ -103,4 +104,33 @@ Optional arguments:
     }
   ]
 }
+```
+
+* modify [smake.py](scripts/smake.py) for source file template
+```python
+copyright_tmpl = \
+"""/**\cond
+  ******************************************************************************
+  * ______  _                             ___  ___        _               
+  * | ___ \(_)                            |  \/  |       | |              
+  * | |_/ / _  _ __    __ _  _ __  _   _  | .  . |  __ _ | | __ ___  _ __ 
+  * | ___ \| || '_ \  / _` || '__|| | | | | |\/| | / _` || |/ // _ \| '__|
+  * | |_/ /| || | | || (_| || |   | |_| | | |  | || (_| ||   <|  __/| |   
+  * \____/ |_||_| |_| \__,_||_|    \__, | \_|  |_/ \__,_||_|\_\\\\___||_|   
+  *                                 __/ |                                 
+  *                                |___/                                  
+  *                                                                       
+  * Copyright (C) """ + year + """ Binary Maker - All Rights Reserved
+  *
+  * This program and the accompanying materials are made available
+  * under the terms described in the LICENSE file which accompanies
+  * this distribution.
+  * Written by Binary Maker <https://github.com/binarymaker>
+  ******************************************************************************
+  \endcond*/
+"""
+```
+* push change to online 
+```
+> git push origin
 ```
