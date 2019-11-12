@@ -16,8 +16,9 @@ Automated standard project folder structure generation python scripts.
  |  +-- tools                       |
  ---|--------------------------------
     +-- scripts                      #(1) Copy script folder from repo to project-folder
-        +-- project-manager.py       #(2) run to generate std folders and files
-        +-- smake.py                 #(3) run to generate .c/.h files
+        +-- setting.json             #(2) modify folder structure and git user configuration
+        +-- project-manager.py       #(3) run to generate std folders and files
+        +-- smake.py                 #(4) run to generate .c/.h files
     +-- README.md                    # Auto generated file
 ```
 
