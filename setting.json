@@ -10,7 +10,7 @@
                     "docs"    , "docs/diagrams/source", "docs/diagrams/out",
                     "config"  ,
                     "example" ,
-                    "test"    , "test/unit-test",
+                    "test"    , "test/unit-test", "test/static-test/lint",
                     "library" ,
                     "project" ,
                     "tools"
