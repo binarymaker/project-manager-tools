@@ -11,6 +11,7 @@
                     "config"  ,
                     "example" ,
                     "test"    , "test/unit-test", "test/static-test/lint",
+                                "test/simulation",
                     "library" ,
                     "project" ,
                     "tools"
