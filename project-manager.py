@@ -19,6 +19,7 @@
 #*****************************************************************************
 
 import os
+import sys
 import argparse
 import subprocess
 import time
@@ -33,6 +34,13 @@ def file_create(file_name, file_text):
         proj_file.close()
         print("file created", file_name)
 
+def execute(command):
+    popen = subprocess.Popen(command, stdout=subprocess.PIPE,bufsize=1)
+    lines_iterator = iter(popen.stdout.readline, b"")
+    while popen.poll() is None:
+        for line in lines_iterator:
+            nline = line.rstrip()
+            print(nline.decode("latin"), end = "\r\n",flush =True) # yield line
 
 def main():
 
@@ -41,41 +49,61 @@ def main():
     parser.add_argument ("-d", "--directory",
                         help="project folder directory",
                         type=str, required=True)
-    parser.add_argument ("-g", "--git", action='store_true',
-                        help="git auto initialization"
+    parser.add_argument ("-f", "--folder", action='store_true',
+                        help="project controller platform"
                         )
-
+    parser.add_argument ("-g", "--gitinit", action='store_true',
+                        help="git init"
+                        )
+    parser.add_argument ("-gu", "--gituser", action='store_true',
+                        help="git user profile config from setting.json"
+                        )
+    parser.add_argument ("-p", "--platform",
+                        help="project controller platform"
+                        )
+    
+    print ('-' * 30)
+    
     args = vars(parser.parse_args())
+    script_dir = os.getcwd()
 
     with open('setting.json') as f:
         settings = json.load(f)
 
-    for folder in settings["project_folders"]:
-        path = args['directory'] + '/' +folder
-        try:
-            os.makedirs(path)
-            print ('folder create -', path)
-        except FileExistsError:
-            print ('folder exist  -', path)
+    if (args['folder']):
+        print ('Project folder structure')
+        print ('------------------------')
+        for folder in settings["project_folders"]:
+            path = args['directory'] + '/' +folder
+            try:
+                os.makedirs(path)
+                print ('folder create -', path)
+            except FileExistsError:
+                print ('folder exist  -', path)
+        
+        for files in settings["project_files"]:
+            path = args['directory'] + '/' + files["name"]
+            file_create(path, files["text"])
 
-    for files in settings["project_files"]:
-        path = args['directory'] + '/' + files["name"]
-        file_create(path, files["text"])
-
-    if (args['git']):
+    if (args['gitinit']):
         os.chdir(args['directory'])
-        print(" ************* Git creation *************")
-        ret = subprocess.call("git init", shell=True)
+        execute('git init')
+        os.chdir(script_dir)
+        
+    if (args['gituser']):
+        os.chdir(args['directory'])
+        subprocess.call('git init', shell=True)
         git_config = settings["git_config"]
-        subprocess.call("git config user.name "+ git_config["name"], shell=True)
+        execute("git config user.name "+ git_config["name"])
         print ("git user name  :", git_config["name"])
-        subprocess.call("git config user.email "+ git_config["email"], shell=True)
+        execute("git config user.email "+ git_config["email"])
         print ("git user email :", git_config["email"])
-        ret = subprocess.call("git checkout -b develop", shell=True)
-        if ret == 0:
-            print ("git 'develop' branch created")
-
-    os.chdir(args['directory'])
+        os.chdir(script_dir)
+        
+    if (args['platform']):
+        os.chdir(args['directory'])
+        execute('sh '+script_dir+'\project-atmega.sh')
+        os.chdir(script_dir)
     
 if __name__ == "__main__":
     main ()
